@@ -1,45 +1,6 @@
 import chalk from "chalk";
 import { ValueNoise } from "value-noise-js";
 
-// Custom hex colors
-// Hues
-const RED       = "#FF0000";
-const ORANGE    = "#FF8000";
-const YELLOW    = "#FFFF00";
-const CHRTRS    = "#80FF00";
-const GREEN     = "#00FF00";
-const SPRING    = "#00FF80";
-const CYAN      = "#00FFFF";
-const CRLN      = "#0080FF";
-const BLUE      = "#0000FF";
-const PURPLE    = "#8000FF";
-const MAGENTA   = "#FF00FF";
-const ROSE      = "#FF0080";
-
-// SHADES
-const SCRLT     = "#800000";
-const OLIVE     = "#808000";
-const FOREST    = "#008000";
-const TEAL      = "#008080";
-const NAVY      = "#000080";
-const DMAG      = "#800080";
-
-// TINTS
-const PINK      = "#FF8080";
-const CNRY      = "#FFFF80";
-const MINT      = "#80FF80";
-const SKY       = "#80FFFF";
-const LBLUE     = "#8080FF";
-const LMAG      = "#FF80FF";
-
-// TONES
-const BLACK     = "#000000";
-const GRAY      = "#808080";
-const WHITE     = "#FFFFFF";
-
-const W = 40;
-const H = 20;
-
 class Map {
     constructor(name = "Map", width, height, zoom = 1, seed = "") {
         this.name = name;
@@ -98,11 +59,25 @@ class Map {
                     let row = [];
                     if (j < this.height / 2) {
                         for (let i = 0; i < this.width; i++) {
-                            row.push((100 / (this.height / 2)) * j);
+                            row.push((100 / Math.floor(this.height / 2)) * j);
                         }
                     } else {
                         for (let i = 0; i < this.width; i++) {
                             row.push(this.map[Math.abs(j - this.height)-1][i]);
+                        }
+                    }
+                    this.map.push(row);
+                }
+                break;
+            case "reflected2":
+                for (let j = 0; j < this.height; j++) {
+                    let row = [];
+                    for (let i = 0; i < this.width; i++) {
+                        if (i < this.width / 2) {
+                            row.push((100 / Math.floor(this.width / 2)) * i);
+                        } else {
+                            row.push(row[Math.abs(i - this.width) - 1]);
+                            // row.push("!");
                         }
                     }
                     this.map.push(row);
