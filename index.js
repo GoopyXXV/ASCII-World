@@ -172,20 +172,3 @@ class Map {
         }
     }
 }
-
-const NOISE = new Map("Noise", W, H, 0.5);
-NOISE.fill();
-
-const DARK = new Map("Dark", W, H);
-DARK.fill("fill", {}, {}, 20);
-
-const VIGN = new Map("Vignette", W, H);
-VIGN.fill("gradient");
-
-const DARKNOISE = new Map("Dark Noise", W, H);
-DARKNOISE.fill("multiply", NOISE, DARK);
-DARKNOISE.display(true, NOISE, DARKNOISE);
-
-const VIGNNOISE = new Map("Shaded Noise", W, H);
-VIGNNOISE.fill("screen", NOISE, VIGN);
-VIGNNOISE.display(true, NOISE, VIGNNOISE);
