@@ -148,12 +148,28 @@ export class Map {
     }
 }
 
-export function Contrast(map) {
-    let temp = new Map("", map.width, map.height);
-    temp.fill("screen", map, map);
+export function Contrast(mapIn, newName) {
+    let temp = new Map(newName, mapIn.width, mapIn.height);
+    temp.fill("screen", mapIn, mapIn);
     return temp;
 }
 
 export function Insert(symbol, map, x, y) {
     
+}
+
+export function Threshold(mapIn, threshold = 100, newName) {
+    let temp = new Map(newName, mapIn.width, mapIn.height);
+    for (let j = 0; j < mapIn.height; j++) {
+        let row = [];
+        for (let i = 0; i < mapIn.width; i++) {
+            if (mapIn.map[j][i] >= threshold) {
+                row.push(100);
+            } else {
+                row.push(0);
+            }
+        }
+        temp.map.push(row);
+    }
+    return temp;
 }
