@@ -10,8 +10,6 @@ The maps can be displayed in the console with **.display()** or **.log()**. The 
 
 ## Class Methods & Functions
 
-A list.
-
 ### Methods
 
 - **Fill Normal:** I don't know why this is useful, but I thought I'd add it anyway since it's easy. It takes an inputted Map and replaces itself with it.
@@ -36,7 +34,7 @@ A list.
 
 ### Functions
 
-- **Contast:** Takes a Map and string as an input. It screens the map against itself, and outputs the new map with the inputted string as its name.
+- **Contast:** Takes a Map and string as an input. It screens and multiplies the map against itself, and outputs the new map with the inputted string as its name.
 
 - **Threshold:** Takes a Map, threshold value, and string as an input. It compares indices of the map against the threshold, replacing them with white if they are greater than or equal to the threshold. The other indices are replaced with black. Outputs a map with the string as its name.
 

@@ -151,7 +151,9 @@ export class Map {
 export function Contrast(mapIn, newName) {
     let temp = new Map(newName, mapIn.width, mapIn.height);
     temp.fill("screen", mapIn, mapIn);
-    return temp;
+    let temp2 = new Map(newName, mapIn.width, mapIn.height);
+    temp2.fill("multiply", temp, temp);
+    return temp2;
 }
 
 export function Insert(symbol, map, x, y) {
