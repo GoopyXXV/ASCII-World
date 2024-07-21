@@ -1,138 +1,191 @@
 import chalk from "chalk";
 import { ValueNoise } from "value-noise-js";
 
+// Custom hex colors
+// Hues
+const RED       = "#FF0000";
+const ORANGE    = "#FF8000";
+const YELLOW    = "#FFFF00";
+const CHRTRS    = "#80FF00";
+const GREEN     = "#00FF00";
+const SPRING    = "#00FF80";
+const CYAN      = "#00FFFF";
+const CRLN      = "#0080FF";
+const BLUE      = "#0000FF";
+const PURPLE    = "#8000FF";
+const MAGENTA   = "#FF00FF";
+const ROSE      = "#FF0080";
+
+// SHADES
+const SCRLT     = "#800000";
+const OLIVE     = "#808000";
+const FOREST    = "#008000";
+const TEAL      = "#008080";
+const NAVY      = "#000080";
+const DMAG      = "#800080";
+
+// TINTS
+const PINK      = "#FF8080";
+const CNRY      = "#FFFF80";
+const MINT      = "#80FF80";
+const SKY       = "#80FFFF";
+const LBLUE     = "#8080FF";
+const LMAG      = "#FF80FF";
+
+// TONES
+const BLACK     = "#000000";
+const GRAY      = "#808080";
+const WHITE     = "#FFFFFF";
+
+const W = 40;
+const H = 20;
+
 class Map {
-    constructor(width, height, zoom, seed) {
+    constructor(name = "Map", width, height, zoom = 1, seed = "") {
+        this.name = name;
         this.map = [];
-        this.asciiMap = [];
         this.noise = new ValueNoise(seed);
         this.width = width;
         this.height = height;
         this.zoom = zoom;
     }
-
-    // Methods
-    fillRow(rowIndex) {
-        let row = [];
-        for (let i = 0; i < this.width; i++) {
-            row.push( Math.floor( this.noise.evalXY(i * this.zoom, rowIndex * this.zoom) * 100 ) );
+    fill(blendMode, layer0, layer1, fillPercent, ) {
+        switch(blendMode) {
+            case "normal":
+                this.blendMode = "normal";
+                for (let j = 0; j < this.height; j++) {
+                    let row = [];
+                    for (let i = 0; i < this.width; i++) {
+                        row.push(layer0.map[j][i]);
+                    }
+                    this.map.push(row);
+                }
+                break;
+            case "multiply":
+                this.blendMode = "multiply";
+                for (let j = 0; j < this.height; j++) {
+                    let row = [];
+                    for (let i = 0; i < this.width; i++) {
+                        row.push( Math.floor(layer1.map[j][i] * layer0.map[j][i] * 0.01) );
+                    }
+                    this.map.push(row);
+                }
+                break;
+            case "screen":
+                this.blendMode = "screen";
+                for (let j = 0; j < this.height; j++) {
+                    let row = [];
+                    for (let i = 0; i < this.width; i++) {
+                        let a = layer0.map[j][i] * 0.01;
+                        let b = layer1.map[j][i] * 0.01;
+                        let value = 1 - ( ( 1 - a ) * ( 1 - b ) );
+                        row.push(Math.floor(value * 100));
+                    }
+                    this.map.push(row);
+                }
+                break;
+            case "gradient":
+                for (let j = 0; j < this.height; j++) {
+                    let row = [];
+                    for (let i = 0; i < this.width; i++) {
+                        row.push((100 / this.height) * j);
+                    }
+                    this.map.push(row);
+                }
+                break;
+            case "reflected":
+                for (let j = 0; j < this.height; j++) {
+                    let row = [];
+                    if (j < this.height / 2) {
+                        for (let i = 0; i < this.width; i++) {
+                            row.push((100 / (this.height / 2)) * j);
+                        }
+                    } else {
+                        for (let i = 0; i < this.width; i++) {
+                            row.push(this.map[Math.abs(j - this.height)-1][i]);
+                        }
+                    }
+                    this.map.push(row);
+                }
+                break;
+            case "fill":
+                for (let j = 0; j < this.height; j++) {
+                    let row = [];
+                    for (let i = 0; i < this.width; i++) {
+                        row.push(fillPercent);
+                    }
+                    this.map.push(row);
+                }
+                break;
+            default:
+                for (let j = 0; j < this.height; j++) {
+                    let row = [];
+                    for (let i = 0; i < this.width; i++) {
+                        row.push(Math.floor(this.noise.evalXY(i * this.zoom, j * this.zoom) * 100));
+                    }
+                    this.map.push(row);
+                }
         }
-        return row;
     }
-
-    fill() {
-        for (let i = 0; i < this.height; i++) {
-            this.map.push(this.fillRow(i));
-        }
-    }
-
-    fillAsciiRow(rowIndex) {
-        let row = [];
-        for (let i = 0; i < this.width; i++) {
-            let value = Math.floor( this.noise.evalXY(i * this.zoom, rowIndex * this.zoom) * 100 );
-            if (value >= 90) {
-                row.push("&");
-            } else if (value >= 80) {
-                row.push("$");
-            } else if (value >= 70) {
-                row.push("X");
-            } else if (value >= 60) {
-                row.push("x");
-            } else if (value >= 50) {
-                row.push("=");
-            } else if (value >= 40) {
-                row.push("+");
-            } else if (value >= 30) {
-                row.push(";");
-            } else if (value >= 20) {
-                row.push(":");
-            } else if (value >= 10) {
-                row.push(".");
-            } else if (value >= 0) {
-                row.push(" ");
-            } else {
-                row.push("?");
-            }
-        }
-        return row;
-    }
-
-    fillAscii() {
-        for (let i = 0; i < this.height; i++) {
-            this.asciiMap.push(this.fillAsciiRow(i));
-        }
-    }
-
     log() {
-        for (let i = 0; i < this.asciiMap.length; i++) {
-            console.log(this.asciiMap[i].join(""));
+        console.log("\n" + this.name + " Log");
+        for (let j = 0; j < this.map.length; j++) {
+            console.log(`Row (${j}): ` + this.map[j].join(", "));
+        }
+    }
+    display(compareBool = false, compareTo) {
+        let displayMapA = [];
+        let displayMapB = [];
+        switch(compareBool) {
+            case true:
+                for (let j = 0; j < this.height; j++) {
+                    let rowA = [];
+                    let rowB = [];
+                    for (let i = 0; i < this.width; i++) {
+                        let x = Math.floor(this.map[j][i] * 2.55);
+                        rowA.push(chalk.bgRgb(x, x, x)(" "));
+
+                        let y = Math.floor(compareTo.map[j][i] * 2.55);
+                        rowB.push(chalk.bgRgb(y, y, y)(" "));
+                    }
+                    displayMapA.push(rowA);
+                    displayMapB.push(rowB);
+                }
+                console.log(this.name + " vs. " + compareTo.name);
+                for (let j = 0; j < displayMapA.length; j++) {
+                    console.log((displayMapA[j].join("")) + " " + (displayMapB[j].join("")));
+                }
+                break;
+            default:
+                for (let j = 0; j < this.height; j++) {
+                    let row = [];
+                    for (let i = 0; i < this.width; i++) {
+                        let x = Math.floor(this.map[j][i] * 2.55);
+                        row.push(chalk.bgRgb(x, x, x)(" "));
+                    }
+                    displayMapA.push(row);
+                }
+                console.log(this.name);
+                for (let j = 0; j < displayMapA.length; j++) {
+                    console.log(displayMapA[j].join(""));
+                }
         }
     }
 }
 
-let w = 80;
-let h = 20;
+const NOISE = new Map("Noise", W, H, 0.5);
+NOISE.fill();
 
-let humidity = new Map(w, h, 0.2, "");
-humidity.fill();
-humidity.fillAscii();
-// humidity.log();
+const DARK = new Map("Dark", W, H);
+DARK.fill("fill", {}, {}, 20);
 
-let temperature = new Map(w, h, 0.2, "");
-temperature.fill();
-temperature.fillAscii();
-// temperature.log();
+const VIGN = new Map("Vignette", W, H);
+VIGN.fill("gradient");
 
-function biomeRow(rowIndex) {
-    let unicorn = [];
-    for (let i = 0; i < w; i++) {
-        if (humidity.map[rowIndex][i] >= 66) {
-            if (temperature.map[rowIndex][i] >= 66) {
-                unicorn.push(chalk.bgYellow.yellow(" "));
-            } else if (temperature.map[rowIndex][i] >= 33) {
-                unicorn.push(chalk.bgGreen.yellow("▒"));
-            } else if (temperature.map[rowIndex][i] >= 0){
-                unicorn.push(chalk.bgGreen(" "));
-            } else {
-                unicorn.push(".");
-            }
-        } else if (humidity.map[rowIndex][i] >= 33) {
-            if (temperature.map[rowIndex][i] >= 66) {
-                unicorn.push(chalk.bgRed.yellow("▒"));
-            } else if (temperature.map[rowIndex][i] >= 33) {
-                unicorn.push(chalk.bgBlack.yellow("▒"));
-            } else if (temperature.map[rowIndex][i] >= 0){
-                unicorn.push(chalk.bgBlack.green("▒"));
-            } else {
-                unicorn.push("!");
-            }
-        } else if (humidity.map[rowIndex][i] >= 0) {
-            if (temperature.map[rowIndex][i] >= 66) {
-                unicorn.push(chalk.bgRed(" "));
-            } else if (temperature.map[rowIndex][i] >= 33) {
-                unicorn.push(chalk.bgRed.red("▒"));
-            } else if (temperature.map[rowIndex][i] >= 0){
-                unicorn.push(chalk.bgBlack(" "));
-            } else {
-                unicorn.push("?");
-            }
-        } else {
-            unicorn.push("x");
-        }
-    }
-    return unicorn;
-}
+const DARKNOISE = new Map("Dark Noise", W, H);
+DARKNOISE.fill("multiply", NOISE, DARK);
+DARKNOISE.display(true, NOISE, DARKNOISE);
 
-let biomes = [];
-
-function biomeMap() {
-    for (let i = 0; i < h; i++) {
-        biomes.push(biomeRow(i));
-    }
-}
-
-biomeMap();
-
-for (let i = 0; i < biomes.length; i++) {
-    console.log(biomes[i].join(""));
-}
+const VIGNNOISE = new Map("Shaded Noise", W, H);
+VIGNNOISE.fill("screen", NOISE, VIGN);
+VIGNNOISE.display(true, NOISE, VIGNNOISE);
