@@ -1,2 +1,2 @@
-import * as world from "./maps.js";
-import { Map } from "./maps.js";
+import * as world from "./world.js";
+import { Map } from "./world.js";

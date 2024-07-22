@@ -121,7 +121,7 @@ class Map {
                 for (let i = 0; i < this.height; i++) {
                     let row = [];
                     for (let j = 0; j < this.width; j++) {
-                        row.push(Math.floor(seed.evalXY(j * zoom, i * zoom) * 100));
+                        row.push(Math.floor(seed.evalXY(i * zoom, j * zoom) * 100));
                     }
                     this.map.push(row);
                 }
@@ -142,41 +142,75 @@ class Map {
             console.log(`Row (${i}): ` + this.map[i].join(", "));
         }
     }
-    display(compareBool = false, compareTo) {
+    display(compareBool = false, int, compareTo1, compareTo2, compareTo3) {
         let displayMapA = [];
         let displayMapB = [];
         switch(compareBool) {
             case true:
-                for (let i = 0; i < this.height; i++) {
-                    let rowA = [];
-                    let rowB = [];
-                    for (let j = 0; j < this.width; j++) {
-                        let x = Math.floor(this.map[i][j] * 2.55);
-                        rowA.push(chalk.bgRgb(x, x, x)(" "));
-
-                        let y = Math.floor(compareTo.map[i][j] * 2.55);
-                        rowB.push(chalk.bgRgb(y, y, y)(" "));
-                    }
-                    displayMapA.push(rowA);
-                    displayMapB.push(rowB);
+                switch(int) {
+                    case 1:
+                        console.log(this.name + ", " + compareTo1.name);
+                        for (let i = 0; i < this.height; i++) {
+                            let rowA = [];
+                            let rowB = [];
+                            for (let j = 0; j < this.width; j++) {
+                                let a = Math.floor(this.map[i][j] * 2.55);
+                                let b = Math.floor(compareTo1.map[i][j] * 2.55);
+                                rowA.push(chalk.bgRgb(a, a, a)(" "));
+                                rowB.push(chalk.bgRgb(b, b, b)(" "));
+                            }
+                            console.log(rowA.join("") + " " + rowB.join(""));
+                        }
+                        break;
+                    case 2:
+                        console.log(this.name + ", " + compareTo1.name + ", " + compareTo2.name);
+                        for (let i = 0; i < this.height; i++) {
+                            let rowA = [];
+                            let rowB = [];
+                            let rowC = [];
+                            for (let j = 0; j < this.width; j++) {
+                                let a = Math.floor(this.map[i][j] * 2.55);
+                                let b = Math.floor(compareTo1.map[i][j] * 2.55);
+                                let c = Math.floor(compareTo2.map[i][j] * 2.55);
+                                rowA.push(chalk.bgRgb(a, a, a)(" "));
+                                rowB.push(chalk.bgRgb(b, b, b)(" "));
+                                rowC.push(chalk.bgRgb(c, c, c)(" "));
+                            }
+                            console.log(rowA.join("") + " " + rowB.join("") + " " + rowC.join(""));
+                        }
+                        break;
+                    case 3:
+                        console.log(this.name + ", " + compareTo1.name + ", " + compareTo2.name + ", " + compareTo3.name);
+                        for (let i = 0; i < this.height; i++) {
+                            let rowA = [];
+                            let rowB = [];
+                            let rowC = [];
+                            let rowD = [];
+                            for (let j = 0; j < this.width; j++) {
+                                let a = Math.floor(this.map[i][j] * 2.55);
+                                let b = Math.floor(compareTo1.map[i][j] * 2.55);
+                                let c = Math.floor(compareTo2.map[i][j] * 2.55);
+                                let d = Math.floor(compareTo3.map[i][j] * 2.55);
+                                rowA.push(chalk.bgRgb(a, a, a)(" "));
+                                rowB.push(chalk.bgRgb(b, b, b)(" "));
+                                rowC.push(chalk.bgRgb(c, c, c)(" "));
+                                rowD.push(chalk.bgRgb(d, d, d)(" "));
+                            }
+                            console.log(rowA.join("") + " " + rowB.join("") + " " + rowC.join("") + " " + rowD.join(""));
+                        }
+                        break;
+                    default:
+                        console.log("Error");
                 }
-                console.log(this.name + " vs. " + compareTo.name);
-                for (let i = 0; i < displayMapA.length; i++) {
-                    console.log((displayMapA[i].join("")) + " " + (displayMapB[i].join("")));
-                }
-                break;
             default:
+                console.log(this.name);
                 for (let i = 0; i < this.height; i++) {
                     let row = [];
                     for (let j = 0; j < this.width; j++) {
                         let x = Math.floor(this.map[i][j] * 2.55);
                         row.push(chalk.bgRgb(x, x, x)(" "));
                     }
-                    displayMapA.push(row);
-                }
-                console.log(this.name);
-                for (let i = 0; i < displayMapA.length; i++) {
-                    console.log(displayMapA[i].join(""));
+                    console.log(row.join(""));
                 }
         }
     }
