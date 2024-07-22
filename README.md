@@ -50,8 +50,6 @@ The maps can be displayed in the console with **.display()** or **.log()**. The 
 
 - White-to-black vertical and horizontal reflected gradients
 
-- Turn multiply & screen into functions, separate from the Map class
-
 - Create humidity & temperature maps, determine climate based off the compared values
 
 - Implement *rain shadow* by using an emboss filter (or something similar) to affect the humidity map
