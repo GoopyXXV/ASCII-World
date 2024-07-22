@@ -1,16 +1,14 @@
 import chalk from "chalk";
 import { ValueNoise } from "value-noise-js";
 
-export class Map {
-    constructor(name = "Map", width, height, zoom = 1, seed = "") {
+class Map {
+    constructor(width, height, name = "Map") {
         this.name = name;
-        this.map = [];
-        this.noise = new ValueNoise(seed);
         this.width = width;
         this.height = height;
-        this.zoom = zoom;
+        this.map = [];
     }
-    fill(type, fillPercent, ) {
+    fill(type, paramA, paramB) {
         switch(type) {
             case "vertical gradient":
                 for (let i = 0; i < this.height; i++) {
@@ -112,16 +110,18 @@ export class Map {
                 for (let i = 0; i < this.height; i++) {
                     let row = [];
                     for (let j = 0; j < this.width; j++) {
-                        row.push(fillPercent);
+                        row.push(paramA);
                     }
                     this.map.push(row);
                 }
                 break;
             case "perlin":
+                let zoom = paramA
+                let seed = new ValueNoise(paramB);
                 for (let i = 0; i < this.height; i++) {
                     let row = [];
                     for (let j = 0; j < this.width; j++) {
-                        row.push(Math.floor(this.noise.evalXY(j * this.zoom, i * this.zoom) * 100));
+                        row.push(Math.floor(seed.evalXY(j * zoom, i * zoom) * 100));
                     }
                     this.map.push(row);
                 }
@@ -182,20 +182,18 @@ export class Map {
     }
 }
 
-export function Contrast(mapIn, newName) {
-    let temp = new Map(newName, mapIn.width, mapIn.height);
-    temp.fill("screen", mapIn, mapIn);
-    let temp2 = new Map(newName, mapIn.width, mapIn.height);
-    temp2.fill("multiply", temp, temp);
+function contrast(mapIn, newName) {
+    temp = screen(mapIn, mapIn);
+    temp2 = multiply(temp, temp, newName);
     return temp2;
 }
 
-export function Insert(symbol, map, rowI, columnJ) {
+function insert(symbol, map, rowI, columnJ) {
     
 }
 
-export function Threshold(mapIn, threshold = 100, newName) {
-    let temp = new Map(newName, mapIn.width, mapIn.height);
+function threshold(mapIn, threshold = 100, newName) {
+    let temp = new Map(mapIn.width, mapIn.height, newName);
     for (let i = 0; i < mapIn.height; i++) {
         let row = [];
         for (let j = 0; j < mapIn.width; j++) {
@@ -210,8 +208,8 @@ export function Threshold(mapIn, threshold = 100, newName) {
     return temp;
 }
 
-export function Multiply(mapA, mapB) {
-    let temp = new Map(`${mapA.name}*${mapB.name}`, mapA.width, mapB.height);
+function multiply(mapA, mapB, newName) {
+    let temp = new Map(mapA.width, mapB.height, newName);
     for (let i = 0; i < mapA.height; i++) {
         let row = [];
         for (let j = 0; j < mapA.width; j++) {
@@ -222,8 +220,8 @@ export function Multiply(mapA, mapB) {
     return temp;
 }
 
-export function Screen(mapA, mapB) {
-    let temp = new Map(`${mapA.name}/${mapB.name}`, mapA.width, mapA.height);
+function screen(mapA, mapB, newName) {
+    let temp = new Map(mapA.width, mapA.height, newName);
     for (let i = 0; i < mapA.height; i++) {
         let row = [];
         for (let j = 0; j < mapA.width; j++) {
@@ -236,3 +234,6 @@ export function Screen(mapA, mapB) {
     }
     return temp;
 }
+
+export { contrast, insert, threshold, multiply, screen};
+export { Map };
