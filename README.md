@@ -61,3 +61,7 @@ The maps can be displayed in the console with **.display()** or **.log()**. The 
 ***
 
 *This is a project I started at work, but now has become a personal project. I don't quite get how Git or GitHub work* totally *yet, so that's why I didn't create a fork of my original project, and just downloaded the .ZIP of the old code and started over.*
+
+***
+
+*Now I've forked my personal project to my work account...*
