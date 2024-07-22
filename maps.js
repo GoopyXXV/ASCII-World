@@ -10,73 +10,40 @@ export class Map {
         this.height = height;
         this.zoom = zoom;
     }
-    fill(blendMode, layer0, layer1, fillPercent, ) {
-        switch(blendMode) {
-            case "normal":
-                this.blendMode = "normal";
-                for (let j = 0; j < this.height; j++) {
-                    let row = [];
-                    for (let i = 0; i < this.width; i++) {
-                        row.push(layer0.map[j][i]);
-                    }
-                    this.map.push(row);
-                }
-                break;
-            case "multiply":
-                this.blendMode = "multiply";
-                for (let j = 0; j < this.height; j++) {
-                    let row = [];
-                    for (let i = 0; i < this.width; i++) {
-                        row.push( Math.floor(layer1.map[j][i] * layer0.map[j][i] * 0.01) );
-                    }
-                    this.map.push(row);
-                }
-                break;
-            case "screen":
-                this.blendMode = "screen";
-                for (let j = 0; j < this.height; j++) {
-                    let row = [];
-                    for (let i = 0; i < this.width; i++) {
-                        let a = layer0.map[j][i] * 0.01;
-                        let b = layer1.map[j][i] * 0.01;
-                        let value = 1 - ( ( 1 - a ) * ( 1 - b ) );
-                        row.push(Math.floor(value * 100));
-                    }
-                    this.map.push(row);
-                }
-                break;
+    fill(type, fillPercent, ) {
+        switch(type) {
             case "gradient":
-                for (let j = 0; j < this.height; j++) {
+                for (let i = 0; i < this.height; i++) {
                     let row = [];
-                    for (let i = 0; i < this.width; i++) {
-                        row.push((100 / this.height) * j);
+                    for (let j = 0; j < this.width; j++) {
+                        row.push((100 / this.height) * i);
                     }
                     this.map.push(row);
                 }
                 break;
             case "reflected":
-                for (let j = 0; j < this.height; j++) {
+                for (let i = 0; i < this.height; i++) {
                     let row = [];
-                    if (j < this.height / 2) {
-                        for (let i = 0; i < this.width; i++) {
-                            row.push((100 / Math.floor(this.height / 2)) * j);
+                    if (i < this.height / 2) {
+                        for (let j = 0; j < this.width; j++) {
+                            row.push((100 / Math.floor(this.height / 2)) * i);
                         }
                     } else {
-                        for (let i = 0; i < this.width; i++) {
-                            row.push(this.map[Math.abs(j - this.height)-1][i]);
+                        for (let j = 0; j < this.width; j++) {
+                            row.push(this.map[Math.abs(i - this.height)-1][j]);
                         }
                     }
                     this.map.push(row);
                 }
                 break;
             case "reflected2":
-                for (let j = 0; j < this.height; j++) {
+                for (let i = 0; i < this.height; i++) {
                     let row = [];
-                    for (let i = 0; i < this.width; i++) {
-                        if (i < this.width / 2) {
-                            row.push((100 / Math.floor(this.width / 2)) * i);
+                    for (let j = 0; j < this.width; j++) {
+                        if (j < this.width / 2) {
+                            row.push((100 / Math.floor(this.width / 2)) * j);
                         } else {
-                            row.push(row[Math.abs(i - this.width) - 1]);
+                            row.push(row[Math.abs(j - this.width) - 1]);
                             // row.push("!");
                         }
                     }
@@ -84,19 +51,19 @@ export class Map {
                 }
                 break;
             case "fill":
-                for (let j = 0; j < this.height; j++) {
+                for (let i = 0; i < this.height; i++) {
                     let row = [];
-                    for (let i = 0; i < this.width; i++) {
+                    for (let j = 0; j < this.width; j++) {
                         row.push(fillPercent);
                     }
                     this.map.push(row);
                 }
                 break;
             default:
-                for (let j = 0; j < this.height; j++) {
+                for (let i = 0; i < this.height; i++) {
                     let row = [];
-                    for (let i = 0; i < this.width; i++) {
-                        row.push(Math.floor(this.noise.evalXY(i * this.zoom, j * this.zoom) * 100));
+                    for (let j = 0; j < this.width; j++) {
+                        row.push(Math.floor(this.noise.evalXY(j * this.zoom, i * this.zoom) * 100));
                     }
                     this.map.push(row);
                 }
@@ -104,8 +71,8 @@ export class Map {
     }
     log() {
         console.log("\n" + this.name + " Log");
-        for (let j = 0; j < this.map.length; j++) {
-            console.log(`Row (${j}): ` + this.map[j].join(", "));
+        for (let i = 0; i < this.map.length; i++) {
+            console.log(`Row (${i}): ` + this.map[i].join(", "));
         }
     }
     display(compareBool = false, compareTo) {
@@ -113,36 +80,38 @@ export class Map {
         let displayMapB = [];
         switch(compareBool) {
             case true:
-                for (let j = 0; j < this.height; j++) {
+                for (let i = 0; i < this.height; i++) {
                     let rowA = [];
                     let rowB = [];
-                    for (let i = 0; i < this.width; i++) {
-                        let x = Math.floor(this.map[j][i] * 2.55);
+                    for (let j = 0; j < this.width; j++) {
+                        let x = Math.floor(this.map[i][j] * 2.55);
                         rowA.push(chalk.bgRgb(x, x, x)(" "));
 
-                        let y = Math.floor(compareTo.map[j][i] * 2.55);
+                        let y = Math.floor(compareTo.map[i][j] * 2.55);
                         rowB.push(chalk.bgRgb(y, y, y)(" "));
                     }
                     displayMapA.push(rowA);
                     displayMapB.push(rowB);
                 }
                 console.log(this.name + " vs. " + compareTo.name);
-                for (let j = 0; j < displayMapA.length; j++) {
-                    console.log((displayMapA[j].join("")) + " " + (displayMapB[j].join("")));
+                for (let i = 0; i < displayMapA.length; i++) {
+                    console.log((displayMapA[i].join("")) + " " + (displayMapB[i].join("")));
                 }
                 break;
             default:
-                for (let j = 0; j < this.height; j++) {
+                // console.log(`Height: ${this.height}\nWidth: ${this.width}`);
+                for (let i = 0; i < this.height; i++) {
                     let row = [];
-                    for (let i = 0; i < this.width; i++) {
-                        let x = Math.floor(this.map[j][i] * 2.55);
+                    for (let j = 0; j < this.width; j++) {
+                        // console.log(`(${i}, ${j}): ${Math.floor(this.map[i][j] * 2.55)}`);
+                        let x = Math.floor(this.map[i][j] * 2.55);
                         row.push(chalk.bgRgb(x, x, x)(" "));
                     }
                     displayMapA.push(row);
                 }
                 console.log(this.name);
-                for (let j = 0; j < displayMapA.length; j++) {
-                    console.log(displayMapA[j].join(""));
+                for (let i = 0; i < displayMapA.length; i++) {
+                    console.log(displayMapA[i].join(""));
                 }
         }
     }
@@ -162,14 +131,41 @@ export function Insert(symbol, map, x, y) {
 
 export function Threshold(mapIn, threshold = 100, newName) {
     let temp = new Map(newName, mapIn.width, mapIn.height);
-    for (let j = 0; j < mapIn.height; j++) {
+    for (let i = 0; i < mapIn.height; i++) {
         let row = [];
-        for (let i = 0; i < mapIn.width; i++) {
-            if (mapIn.map[j][i] >= threshold) {
+        for (let j = 0; j < mapIn.width; j++) {
+            if (mapIn.map[i][j] >= threshold) {
                 row.push(100);
             } else {
                 row.push(0);
             }
+        }
+        temp.map.push(row);
+    }
+    return temp;
+}
+
+export function Multiply(mapA, mapB) {
+    let temp = new Map(`${mapA.name}*${mapB.name}`, mapA.width, mapB.height);
+    for (let i = 0; i < mapA.height; i++) {
+        let row = [];
+        for (let j = 0; j < mapA.width; j++) {
+            row.push( Math.floor(mapA.map[i][j] * mapB.map[i][j] * 0.01 ) );
+        }
+        temp.map.push(row);
+    }
+    return temp;
+}
+
+export function Screen(mapA, mapB) {
+    let temp = new Map(`${mapA.name}/${mapB.name}`, mapA.width, mapA.height);
+    for (let i = 0; i < mapA.height; i++) {
+        let row = [];
+        for (let j = 0; j < mapA.width; j++) {
+            let a = mapA.map[i][j] * 0.01;
+            let b = mapB.map[i][j] * 0.01;
+            let value = 1 - ( ( 1 - a ) * ( 1 - b ) );
+            row.push(Math.floor(value * 100));
         }
         temp.map.push(row);
     }
