@@ -21,6 +21,15 @@ export class Map {
                     this.map.push(row);
                 }
                 break;
+            case "gradient2":
+                for (let i = 0; i < this.height; i++) {
+                    let row = [];
+                    for (let j = 0; j < this.width; j++) {
+                        row.push((100 / this.height) * i);
+                    }
+                    this.map.unshift(row);
+                }
+                break;
             case "reflected":
                 for (let i = 0; i < this.height; i++) {
                     let row = [];
@@ -99,11 +108,9 @@ export class Map {
                 }
                 break;
             default:
-                // console.log(`Height: ${this.height}\nWidth: ${this.width}`);
                 for (let i = 0; i < this.height; i++) {
                     let row = [];
                     for (let j = 0; j < this.width; j++) {
-                        // console.log(`(${i}, ${j}): ${Math.floor(this.map[i][j] * 2.55)}`);
                         let x = Math.floor(this.map[i][j] * 2.55);
                         row.push(chalk.bgRgb(x, x, x)(" "));
                     }
@@ -125,7 +132,7 @@ export function Contrast(mapIn, newName) {
     return temp2;
 }
 
-export function Insert(symbol, map, x, y) {
+export function Insert(symbol, map, rowI, columnJ) {
     
 }
 

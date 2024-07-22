@@ -46,8 +46,6 @@ The maps can be displayed in the console with **.display()** or **.log()**. The 
 
 ## Planned Features
 
-- White-to-black gradient (top to bottom, reverse of current gradient)
-
 - White-to-black vertical and horizontal reflected gradients
 
 - Create humidity & temperature maps, determine climate based off the compared values
