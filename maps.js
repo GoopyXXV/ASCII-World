@@ -12,7 +12,7 @@ export class Map {
     }
     fill(type, fillPercent, ) {
         switch(type) {
-            case "gradient":
+            case "vertical gradient":
                 for (let i = 0; i < this.height; i++) {
                     let row = [];
                     for (let j = 0; j < this.width; j++) {
@@ -21,7 +21,7 @@ export class Map {
                     this.map.push(row);
                 }
                 break;
-            case "gradient2":
+            case "reverse vertical gradient":
                 for (let i = 0; i < this.height; i++) {
                     let row = [];
                     for (let j = 0; j < this.width; j++) {
@@ -30,7 +30,51 @@ export class Map {
                     this.map.unshift(row);
                 }
                 break;
-            case "reflected":
+            case "horizontal gradient":
+                for (let i = 0; i < this.height; i++) {
+                    let row = [];
+                    for (let j = 0; j < this.width; j++) {
+                        row.push((100 / this.width) * j);
+                    }
+                    this.map.push(row);
+                }
+                break;
+            case "reverse horizontal gradient":
+                for (let i = 0; i < this.height; i++) {
+                    let row = [];
+                    for (let j = 0; j < this.width; j++) {
+                        row.unshift((100 / this.width) * j);
+                    }
+                    this.map.push(row);
+                }
+                break;
+            case "horizontal reflected gradient":
+                for (let i = 0; i < this.height; i++) {
+                    let row = [];
+                    for (let j = 0; j < this.width; j++) {
+                        if (j < this.width / 2) {
+                            row.push((100 / Math.floor(this.width / 2)) * j);
+                        } else {
+                            row.push(row[Math.abs(j - this.width) - 1]);
+                        }
+                    }
+                    this.map.push(row);
+                }
+                break;
+            case "reverse horizontal reflected gradient":
+                for (let i = 0; i < this.height; i++) {
+                    let row = [];
+                    for (let j = 0; j < this.width; j++) {
+                        if (j < this.width / 2) {
+                            row.unshift((100 / Math.floor(this.width / 2)) * j);
+                        } else {
+                            row.push(row[Math.abs(j - this.width) - 1]);
+                        }
+                    }
+                    this.map.push(row);
+                }
+                break;
+            case "vertical reflected gradient":
                 for (let i = 0; i < this.height; i++) {
                     let row = [];
                     if (i < this.height / 2) {
@@ -45,18 +89,23 @@ export class Map {
                     this.map.push(row);
                 }
                 break;
-            case "reflected2":
+            case "reverse vertical reflected gradient":
                 for (let i = 0; i < this.height; i++) {
                     let row = [];
-                    for (let j = 0; j < this.width; j++) {
-                        if (j < this.width / 2) {
-                            row.push((100 / Math.floor(this.width / 2)) * j);
-                        } else {
-                            row.push(row[Math.abs(j - this.width) - 1]);
-                            // row.push("!");
+                    if (i < this.height / 2) {
+                        for (let j = 0; j < this.width; j++) {
+                            row.push((100 / Math.floor(this.height / 2)) * i);
+                        }
+                    } else {
+                        for (let j = 0; j < this.width; j++) {
+                            row.push(this.map[Math.abs(i - this.height)-1][j]);
                         }
                     }
-                    this.map.push(row);
+                    if (i <= this.height / 2) {
+                        this.map.unshift(row);
+                    } else {
+                        this.map.push(row);
+                    }
                 }
                 break;
             case "fill":
@@ -68,11 +117,20 @@ export class Map {
                     this.map.push(row);
                 }
                 break;
-            default:
+            case "perlin":
                 for (let i = 0; i < this.height; i++) {
                     let row = [];
                     for (let j = 0; j < this.width; j++) {
                         row.push(Math.floor(this.noise.evalXY(j * this.zoom, i * this.zoom) * 100));
+                    }
+                    this.map.push(row);
+                }
+                break;
+            default:
+                for (let i = 0; i < this.height; i++) {
+                    let row = [];
+                    for (let j = 0; j < this.width; j++) {
+                        row.push(Math.random() * 100);
                     }
                     this.map.push(row);
                 }

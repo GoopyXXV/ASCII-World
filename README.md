@@ -46,8 +46,6 @@ The maps can be displayed in the console with **.display()** or **.log()**. The 
 
 ## Planned Features
 
-- White-to-black vertical and horizontal reflected gradients
-
 - Create humidity & temperature maps, determine climate based off the compared values
 
 - Implement *rain shadow* by using an emboss filter (or something similar) to affect the humidity map
