@@ -143,8 +143,6 @@ class Map {
         }
     }
     display(compareBool = false, int, compareTo1, compareTo2, compareTo3) {
-        let displayMapA = [];
-        let displayMapB = [];
         switch(compareBool) {
             case true:
                 switch(int) {
@@ -202,6 +200,7 @@ class Map {
                     default:
                         console.log("Error");
                 }
+                break;
             default:
                 console.log(this.name);
                 for (let i = 0; i < this.height; i++) {
