@@ -46,18 +46,18 @@ The maps can be displayed in the console with **.display()** or **.log()**. The 
 
 ## Planned Features
 
-- White-to-black gradient (top to bottom, reverse of current gradient)
-
-- White-to-black vertical and horizontal reflected gradients
-
-- Turn multiply & screen into functions, separate from the Map class
-
 - Create humidity & temperature maps, determine climate based off the compared values
 
 - Implement *rain shadow* by using an emboss filter (or something similar) to affect the humidity map
 
 - Function to insert a specified symbol at any (x, y) coordinate
 
+- Stretch
+
 ***
 
 *This is a project I started at work, but now has become a personal project. I don't quite get how Git or GitHub work* totally *yet, so that's why I didn't create a fork of my original project, and just downloaded the .ZIP of the old code and started over.*
+
+***
+
+*Now I've forked my personal project to my work account...*
