@@ -7,7 +7,8 @@ const ASPECT_RATIO = 2; // x:1
 const HUM_ZOOM = 0.25;
 
 // Commented values are for W = 150
-const SEA_LVL = 0.12 * W;           // const SEA_LVL = 18;
+const SEA_LVL = 15;           // const SEA_LVL = 18;
+const MTN_LVL = 50;
 const ELEV_A_ZOOM = W * 3.333e-4;   // const ELEV_MASK_ZOOM = 0.05;
 const ELEV_B_ZOOM = W * 6.666e-4;   // const ELEV_MASK_2_ZOOM = 0.1;
 const ELEV_C_ZOOM = W * 0.001333;   // const ELEV_ZOOM = 0.2;
@@ -80,135 +81,135 @@ function createClimates(temperature, humidity, elevation, newName) {
 }
 
 function determineClimate(t, h, e) {
-    if (e >= 66) {
+    if (e >= MTN_LVL) {
         if (t >= 66) {
             if (h >= 66) {
-                let climate = "";
-                let color = ;
+                let climate = "forest";
+                let color = chalk.bgGreen.greenBright("↑");
                 return {climate: climate, color: color, t: t, h: h, e: e};
             } else if (h >= 33) {
-                let climate = "";
-                let color = ;
+                let climate = "taiga";
+                let color = chalk.bgGreen.white("↑");
                 return {climate: climate, color: color, t: t, h: h, e: e};
             } else if (h >= 0) {
-                let climate = "";
-                let color = ;
+                let climate = "summit";
+                let color = chalk.bgGray.white("▲");
                 return {climate: climate, color: color, t: t, h: h, e: e};
             }
-        } else if (t >= 33) {
+        } else if (t >= SEA_LVL) {
             if (h >= 66) {
-                let climate = "";
-                let color = ;
+                let climate = "taiga";
+                let color = chalk.bgGreen.white("↑");
                 return {climate: climate, color: color, t: t, h: h, e: e};
             } else if (h >= 33) {
-                let climate = "";
-                let color = ;
+                let climate = "taiga";
+                let color = chalk.bgGreen.white("↑");
                 return {climate: climate, color: color, t: t, h: h, e: e};
             } else if (h >= 0) {
-                let climate = "";
-                let color = ;
+                let climate = "summit";
+                let color = chalk.bgGray.white("▲");
                 return {climate: climate, color: color, t: t, h: h, e: e};
             }
         } else if (t >= 0) {
             if (h >= 66) {
-                let climate = "";
-                let color = ;
+                let climate = "tundra";
+                let color = chalk.bgWhite.gray(".");
                 return {climate: climate, color: color, t: t, h: h, e: e};
             } else if (h >= 33) {
-                let climate = "";
-                let color = ;
+                let climate = "tundra";
+                let color = chalk.bgWhite.gray(".");
                 return {climate: climate, color: color, t: t, h: h, e: e};
             } else if (h >= 0) {
-                let climate = "";
-                let color = ;
+                let climate = "glacier";
+                let color = chalk.bgWhite.whiteBright("▲");
                 return {climate: climate, color: color, t: t, h: h, e: e};
             }
         }
-    } else if (e >= 33) {
+    } else if (e >= SEA_LVL) {
         if (t >= 66) {
             if (h >= 66) {
-                let climate = "";
-                let color = ;
+                let climate = "rainforest";
+                let color = chalk.bgGreen.greenBright("♣");
                 return {climate: climate, color: color, t: t, h: h, e: e};
             } else if (h >= 33) {
-                let climate = "";
-                let color = ;
+                let climate = "savanna";
+                let color = chalk.bgYellow.green(",");
                 return {climate: climate, color: color, t: t, h: h, e: e};
             } else if (h >= 0) {
-                let climate = "";
-                let color = ;
+                let climate = "desert";
+                let color = chalk.bgYellowBright.yellow(".");
                 return {climate: climate, color: color, t: t, h: h, e: e};
             }
         } else if (t >= 33) {
             if (h >= 66) {
-                let climate = "";
-                let color = ;
+                let climate = "beach";
+                let color = chalk.bgYellowBright.greenBright("↑");
                 return {climate: climate, color: color, t: t, h: h, e: e};
             } else if (h >= 33) {
-                let climate = "";
-                let color = ;
+                let climate = "forest";
+                let color = chalk.bgGreen.greenBright("↑");
                 return {climate: climate, color: color, t: t, h: h, e: e};
             } else if (h >= 0) {
-                let climate = "";
-                let color = ;
+                let climate = "grassland";
+                let color = chalk.bgGreen.green(",");
                 return {climate: climate, color: color, t: t, h: h, e: e};
             }
         } else if (t >= 0) {
             if (h >= 66) {
-                let climate = "";
-                let color = ;
+                let climate = "cold beach";
+                let color = chalk.bgGray.white(".");
                 return {climate: climate, color: color, t: t, h: h, e: e};
             } else if (h >= 33) {
-                let climate = "";
-                let color = ;
+                let climate = "swamp";
+                let color = chalk.bgGreen.blue("&");
                 return {climate: climate, color: color, t: t, h: h, e: e};
             } else if (h >= 0) {
-                let climate = "";
-                let color = ;
+                let climate = "tundra";
+                let color = chalk.bgWhite.gray(".");
                 return {climate: climate, color: color, t: t, h: h, e: e};
             }
         }
     } else if (e >= 0) {
         if (t >= 66) {
             if (h >= 66) {
-                let climate = "";
-                let color = ;
+                let climate = "reef";
+                let color = chalk.bgCyan.cyanBright("~");
                 return {climate: climate, color: color, t: t, h: h, e: e};
             } else if (h >= 33) {
-                let climate = "";
-                let color = ;
+                let climate = "warm ocean";
+                let color = chalk.bgBlueBright.cyan("~");
                 return {climate: climate, color: color, t: t, h: h, e: e};
             } else if (h >= 0) {
-                let climate = "";
-                let color = ;
+                let climate = "warm ocean";
+                let color = chalk.bgBlueBright.cyan("~");
                 return {climate: climate, color: color, t: t, h: h, e: e};
             }
         } else if (t >= 33) {
             if (h >= 66) {
-                let climate = "";
-                let color = ;
+                let climate = "ocean";
+                let color = chalk.bgBlueBright(" ");
                 return {climate: climate, color: color, t: t, h: h, e: e};
             } else if (h >= 33) {
-                let climate = "";
-                let color = ;
+                let climate = "ocean";
+                let color = chalk.bgBlueBright(" ");
                 return {climate: climate, color: color, t: t, h: h, e: e};
             } else if (h >= 0) {
-                let climate = "";
-                let color = ;
+                let climate = "ocean";
+                let color = chalk.bgBlueBright(" ");
                 return {climate: climate, color: color, t: t, h: h, e: e};
             }
         } else if (t >= 0) {
             if (h >= 66) {
-                let climate = "";
-                let color = ;
+                let climate = "cold ocean";
+                let color = chalk.bgBlue(" ");
                 return {climate: climate, color: color, t: t, h: h, e: e};
             } else if (h >= 33) {
-                let climate = "";
-                let color = ;
+                let climate = "cold ocean";
+                let color = chalk.bgBlue(" ");
                 return {climate: climate, color: color, t: t, h: h, e: e};
             } else if (h >= 0) {
-                let climate = "";
-                let color = ;
+                let climate = "ice burg";
+                let color = chalk.bgBlue.white("~");
                 return {climate: climate, color: color, t: t, h: h, e: e};
             }
         }
@@ -226,4 +227,6 @@ function displayClimates(mapIn) {
 }
 
 // Show results
-// overlayMaps(TMPRTR, HUM, ELEV_E);
+const WORLD = createClimates(TMPRTR, HUM, ELEV_E);
+
+displayClimates(WORLD);
